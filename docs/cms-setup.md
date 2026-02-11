@@ -4,6 +4,18 @@ This project uses **Decap CMS** served from [`public/admin/index.html`](public/a
 
 ## Cloudflare Pages configuration
 
+## Recommended deployment approach
+
+Use **Cloudflare Pages Git integration** (no custom deploy command).
+
+- Build command: `npm run build`
+- Build output directory: `dist`
+- Deploy command: **none**
+
+If your Pages UI requires a deploy command, you’re effectively using a Direct Upload flow.
+In that case you must provide Cloudflare API credentials and use Wrangler’s Pages deploy
+command (see “Direct upload alternative” below).
+
 ### Environment variables / secrets
 
 Add these in **Cloudflare Dashboard → Pages → crafthead-studio → Settings → Environment variables**.
@@ -50,3 +62,15 @@ Copy the generated **Client ID** + **Client secret** into Cloudflare Pages env v
   See [`public/admin/config.yml`](public/admin/config.yml:1).
 - Your GitHub user must have write access to `Zaldor/crafthead` for editing/publishing.
 
+## Direct upload alternative (only if deploy command is required)
+
+If you must use a deploy command in Pages:
+
+1) Set deploy command to:
+`npx wrangler pages deploy dist --project-name crafthead-studio`
+
+2) Add Cloudflare credentials as env vars:
+- `CLOUDFLARE_API_TOKEN` (API token with Pages permissions)
+- `CLOUDFLARE_ACCOUNT_ID`
+
+Without these, Wrangler will fail with API auth errors.
