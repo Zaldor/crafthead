@@ -18,7 +18,7 @@ command (see “Direct upload alternative” below).
 
 ### Environment variables / secrets
 
-Add these in **Cloudflare Dashboard → Pages → crafthead-studio → Settings → Environment variables**.
+Add these in your **Cloudflare Worker/Pages environment variables** for the deployed host.
 
 #### Required (CMS OAuth)
 
@@ -43,14 +43,14 @@ Optional:
 Create a GitHub OAuth App (GitHub → Settings → Developer settings → OAuth Apps).
 
 Set:
-- **Homepage URL**: `https://crafthead-studio.pages.dev`
-- **Authorization callback URL**: `https://crafthead-studio.pages.dev/api/cms-oauth/callback`
+- **Homepage URL**: `https://site0.crafthead.workers.dev`
+- **Authorization callback URL**: `https://site0.crafthead.workers.dev/api/cms-oauth/callback`
 
 Copy the generated **Client ID** + **Client secret** into Cloudflare Pages env vars.
 
 ## Accessing the CMS
 
-- URL: `https://crafthead-studio.pages.dev/admin`
+- URL: `https://site0.crafthead.workers.dev/admin`
 - The `/admin` route is provided by [`src/pages/admin.astro`](src/pages/admin.astro:1).
 
 ## Notes

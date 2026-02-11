@@ -4,7 +4,8 @@ backend:
   name: github
   repo: Zaldor/crafthead
   branch: main
-  base_url: https://crafthead-studio.pages.dev
+  # Deployed host (Workers)
+  base_url: https://site0.crafthead.workers.dev
   auth_endpoint: api/cms-oauth/auth
   commit_messages:
     create: 'Create {{collection}} "{{slug}}"'
