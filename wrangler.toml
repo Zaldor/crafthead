@@ -1,0 +1,12 @@
+# This file is **not** used for Cloudflare Pages.
+#
+# Cloudflare Pages deploys via Git integration and automatically handles
+# static assets + Pages Functions.
+#
+# It exists only to prevent accidental `wrangler deploy` (Workers) usage.
+# For Pages direct upload via Wrangler, use:
+#   wrangler pages deploy ./dist --project-name crafthead-studio
+
+name = "crafthead-studio"
+compatibility_date = "2026-02-11"
+

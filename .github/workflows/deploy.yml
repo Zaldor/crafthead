@@ -1,10 +1,10 @@
 name: Deploy to Cloudflare Pages
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  # This repo is intended to deploy via **Cloudflare Pages Git integration**.
+  # Keeping this workflow around can be useful for manual deployments, but
+  # running it on every push/PR will fail unless repo secrets are configured.
+  workflow_dispatch:
 
 jobs:
   deploy:
