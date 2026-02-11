@@ -1,0 +1,63 @@
+---
+/**
+ * @fileoverview Horizontal rail of featured projects.
+ */
+import ProjectCard from '@/components/molecules/ProjectCard.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  projects: Array<CollectionEntry<'projects'>>;
+}
+
+const { projects } = Astro.props;
+const hasProjects = projects.length > 0;
+---
+{hasProjects && (
+  <section class="c-featured-projects section">
+  <div class="container">
+    <div class="c-featured-projects__header flex-between">
+      <h2>Selected case studies</h2>
+      <a class="c-featured-projects__view-all" href="/projects">View all projects</a>
+    </div>
+    <div class="c-featured-projects__rail" role="list">
+      {projects.map((project) => (
+        <div role="listitem">
+          <ProjectCard
+            title={project.data.title}
+            summary={project.data.summary}
+            services={project.data.services}
+            client={project.data.client}
+            href={`/projects/${project.slug}`}
+            heroImage={project.data.heroImage}
+            heroImageAlt={project.data.heroImageAlt}
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+)}
+
+<style>
+  .c-featured-projects__header h2 {
+    font-size: clamp(2rem, 5vw, 3rem);
+  }
+
+  .c-featured-projects__view-all {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+  }
+
+  .c-featured-projects__rail {
+    display: grid;
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+  }
+
+  @media (min-width: 960px) {
+    .c-featured-projects__rail {
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+  }
+</style>

@@ -1,0 +1,144 @@
+---
+/**
+ * @fileoverview Accessible contact form organism with progressive enhancement.
+ */
+import Button from '@/components/atoms/Button.astro';
+import ContactField from '@/components/molecules/ContactField.astro';
+import VisuallyHidden from '@/components/atoms/VisuallyHidden.astro';
+
+const action = '/api/contact';
+---
+<form class="c-contact-form" action={action} method="post" data-enhanced>
+  <VisuallyHidden>
+    <p>This form uses JavaScript to enhance the experience but also works without it.</p>
+  </VisuallyHidden>
+  <div class="c-contact-form__grid">
+    <ContactField id="name" label="Name" required placeholder="Your full name" autoComplete="name" />
+    <ContactField id="email" label="Email" type="email" required placeholder="you@company.com" autoComplete="email" />
+    <ContactField id="company" label="Company" placeholder="Organisation" />
+    <ContactField id="timeline" label="Timeline" placeholder="When would you like to launch?" />
+  </div>
+  <ContactField id="message" label="Project overview" type="textarea" required placeholder="Tell us about the project goals, scope, and timeline" />
+  <div class="c-contact-form__footer">
+    <Button type="submit" label="Send message" variant="primary" size="lg" />
+    <p class="c-contact-form__note">We’ll reply within two business days. No spam, ever.</p>
+  </div>
+  <p class="c-contact-form__status" aria-live="polite" data-status></p>
+</form>
+
+<script>
+  const form = document.querySelector('[data-enhanced]');
+  if (form) {
+    form.addEventListener('submit', async (event) => {
+      const target = event.currentTarget;
+      if (!(target instanceof HTMLFormElement)) return;
+      event.preventDefault();
+
+      const submitButton = target.querySelector('button[type="submit"]');
+      const statusEl = target.querySelector('[data-status]');
+      if (submitButton) {
+        submitButton.setAttribute('disabled', 'true');
+        submitButton.dataset.loading = 'true';
+      }
+
+      if (statusEl instanceof HTMLElement) {
+        statusEl.textContent = 'Sending message…';
+        statusEl.dataset.state = 'loading';
+        statusEl.removeAttribute('role');
+      }
+
+      const formData = new FormData(target);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch(target.action, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          throw new Error('Something went wrong. Please try again later.');
+        }
+
+        target.reset();
+        target.dataset.state = 'success';
+        if (statusEl instanceof HTMLElement) {
+          statusEl.textContent = 'Thank you. We will be in touch shortly.';
+          statusEl.dataset.state = 'success';
+          statusEl.removeAttribute('role');
+        }
+        target.dispatchEvent(new CustomEvent('contact:success'));
+      } catch (error) {
+        console.error(error);
+        target.dataset.state = 'error';
+        if (statusEl instanceof HTMLElement) {
+          statusEl.textContent = 'We could not send your message. Please try again or email hello@crafthead.studio.';
+          statusEl.dataset.state = 'error';
+          statusEl.setAttribute('role', 'alert');
+        }
+        target.dispatchEvent(new CustomEvent('contact:error'));
+      } finally {
+        if (submitButton) {
+          submitButton.removeAttribute('disabled');
+          submitButton.dataset.loading = 'false';
+        }
+
+        if (statusEl instanceof HTMLElement && target.dataset.state === 'error') {
+          statusEl.focus?.();
+        }
+      }
+    });
+  }
+</script>
+
+<style>
+  .c-contact-form {
+    display: grid;
+    gap: var(--space-6);
+    padding: clamp(2rem, 5vw, 3rem);
+    background: color-mix(in srgb, var(--color-bg-surface) 80%, transparent);
+    border-radius: var(--card-radius);
+    border: 1px solid color-mix(in srgb, var(--color-border-subtle) 60%, transparent);
+    box-shadow: var(--shadow-md);
+  }
+
+  .c-contact-form__grid {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 900px) {
+    .c-contact-form__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .c-contact-form__footer {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .c-contact-form__note {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin: 0;
+  }
+
+  .c-contact-form__status {
+    min-height: 1.25rem;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .c-contact-form[data-state="success"] .c-contact-form__status {
+    color: var(--color-text-primary);
+  }
+
+  .c-contact-form[data-state="error"] .c-contact-form__status {
+    color: var(--color-red-500);
+  }
+</style>

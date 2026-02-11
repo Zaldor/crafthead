@@ -1,0 +1,93 @@
+---
+/**
+ * @fileoverview Global site header with navigation and CTA.
+ */
+import Button from '@/components/atoms/Button.astro';
+import NavLink from '@/components/molecules/NavLink.astro';
+
+const navItems = [
+  { href: '/', label: 'Home', slug: 'index' },
+  { href: '/services', label: 'Services', slug: 'services' },
+  { href: '/projects', label: 'Projects', slug: 'projects' },
+  { href: '/about', label: 'About', slug: 'about' },
+  { href: '/contact', label: 'Contact', slug: 'contact' },
+];
+
+const pathname = Astro.url.pathname;
+const normalizePath = (value: string) => {
+  if (value === '/') return '/';
+  return value.replace(/\/+$/, '') || '/';
+};
+const currentPath = normalizePath(pathname);
+---
+<header class="c-site-header" data-nav>
+  <div class="c-site-header__inner container">
+    <a class="c-site-header__brand" href="/" aria-label="Crafthead home">
+      <span>Crafthead</span>
+    </a>
+    <nav class="c-site-header__nav" aria-label="Primary">
+      <ul>
+        {navItems.map((item) => (
+          <li>
+            <NavLink href={item.href} label={item.label} isActive={currentPath === normalizePath(item.href)} />
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <div class="c-site-header__cta">
+      <Button href="/contact" label="Book consultation" variant="primary" size="md" />
+    </div>
+  </div>
+</header>
+
+<style>
+  .c-site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(14px);
+    background: color-mix(in srgb, var(--color-bg-body) 80%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-border-subtle) 60%, transparent);
+  }
+
+  .c-site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+    padding-block: var(--space-4);
+  }
+
+  .c-site-header__brand {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    color: var(--color-text-primary);
+  }
+
+  .c-site-header__nav ul {
+    display: flex;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .c-site-header__cta {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .c-site-header__cta {
+      display: block;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .c-site-header__nav {
+      display: none;
+    }
+  }
+</style>

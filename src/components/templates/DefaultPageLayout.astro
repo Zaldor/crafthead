@@ -1,0 +1,136 @@
+---
+/**
+ * @fileoverview Template for marketing pages with hero and stacked sections.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SiteHeader from '@/components/organisms/SiteHeader.astro';
+import SiteFooter from '@/components/organisms/SiteFooter.astro';
+import Hero from '@/components/organisms/Hero.astro';
+import type { SEOMetadata } from '@/utils/seo';
+
+interface SectionRichCopy {
+  type: 'richCopy';
+  heading: string;
+  body: string;
+}
+
+interface SectionFeatureGrid {
+  type: 'featureGrid';
+  heading: string;
+  features: Array<{ title: string; description: string }>;
+}
+
+export type PageSection = SectionRichCopy | SectionFeatureGrid;
+
+interface PageContent {
+  locale: string;
+  slugBase: string;
+  title: string;
+  hero?: {
+    eyebrow?: string;
+    heading: string;
+    subheading?: string;
+    primaryCtaLabel?: string;
+    primaryCtaUrl?: string;
+    secondaryCtaLabel?: string;
+    secondaryCtaUrl?: string;
+  };
+  sections?: PageSection[];
+  seo?: SEOMetadata;
+}
+
+interface Props {
+  content: PageContent;
+}
+
+const { content } = Astro.props;
+---
+<BaseLayout seo={{
+  title: content.seo?.metaTitle ?? `${content.title} — Crafthead`,
+  description: content.seo?.metaDescription ?? content.hero?.subheading ?? '',
+  ogImage: content.seo?.ogImage,
+}} lang={content.locale} slugBase={content.slugBase}>
+  <Fragment slot="header">
+    <SiteHeader />
+  </Fragment>
+  {content.hero && <Hero content={content.hero} />}
+  <div class="section-body">
+    {content.sections?.map((section) => {
+      if (section.type === 'richCopy') {
+        return (
+          <section class="section section--tight">
+            <div class="container section__rich">
+              <h2>{section.heading}</h2>
+              <p>{section.body}</p>
+            </div>
+          </section>
+        );
+      }
+
+      if (section.type === 'featureGrid') {
+        return (
+          <section class="section">
+            <div class="container section__feature-grid">
+              <div class="section__feature-grid__heading">
+                <h2>{section.heading}</h2>
+              </div>
+              <div class="section__feature-grid__grid">
+                {section.features.map((feature) => (
+                  <div class="feature-item">
+                    <h3>{feature.title}</h3>
+                    <p>{feature.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      }
+    })}
+  </div>
+  <slot />
+  <Fragment slot="footer">
+    <SiteFooter />
+  </Fragment>
+</BaseLayout>
+
+<style>
+  .section__rich {
+    display: grid;
+    gap: var(--space-4);
+    max-width: 64ch;
+  }
+
+  .section__rich h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .section__feature-grid {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  .section__feature-grid__grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 900px) {
+    .section__feature-grid__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .feature-item {
+    padding: var(--space-6);
+    border-radius: var(--card-radius);
+    border: 1px solid color-mix(in srgb, var(--color-border-subtle) 60%, transparent);
+    background: color-mix(in srgb, var(--color-bg-surface) 80%, transparent);
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .feature-item h3 {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+  }
+</style>

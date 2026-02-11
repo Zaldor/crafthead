@@ -1,0 +1,115 @@
+---
+/**
+ * @fileoverview Base HTML layout for Crafthead with global styles, SEO, and analytics injection.
+ */
+import '../styles/global.css';
+import type { SEOMetadata } from '@/utils/seo';
+import { generateSEOTags } from '@/utils/seo';
+import { organizationSchema } from '@/utils/schema';
+import { getAlternateLocales, getLocalizedUrl, DEFAULT_LOCALE } from '@/utils/i18n';
+import settings from '@/data/settings.json';
+
+interface Props {
+  seo?: SEOMetadata;
+  lang?: string;
+  slugBase?: string;
+}
+
+const { seo, lang = 'en', slugBase } = Astro.props;
+const canonicalSlug = slugBase ?? 'index';
+const seoTags = generateSEOTags({
+  title: seo?.title ?? settings.siteTitle,
+  description: seo?.description ?? settings.siteDescription,
+  canonical: seo?.canonical ?? new URL(Astro.url.pathname, settings.siteUrl).toString(),
+  ogImage: seo?.ogImage,
+  ogType: seo?.ogType ?? 'website',
+  publishDate: seo?.publishDate,
+  modifiedDate: seo?.modifiedDate,
+});
+
+const gtmId = import.meta.env.PUBLIC_GTM_ID;
+const orgSchema = organizationSchema();
+const alternateLocales = getAlternateLocales(canonicalSlug);
+---
+<!DOCTYPE html>
+<html lang={lang} data-theme="craft-dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{seoTags.title}</title>
+    <meta name="description" content={seoTags.description} />
+    {seoTags.canonical && <link rel="canonical" href={seoTags.canonical} />}
+    <meta property="og:type" content={seoTags.openGraph.basic.type} />
+    <meta property="og:title" content={seoTags.openGraph.basic.title} />
+    <meta property="og:description" content={seoTags.openGraph.optional.description} />
+    <meta property="og:image" content={seoTags.openGraph.basic.image} />
+    <meta property="og:site_name" content={seoTags.openGraph.optional.siteName} />
+    <meta property="og:locale" content={seoTags.openGraph.optional.locale} />
+    <meta name="twitter:card" content={seoTags.twitter.card} />
+    <meta name="twitter:site" content={seoTags.twitter.site} />
+    <meta name="twitter:creator" content={seoTags.twitter.creator} />
+    <meta name="twitter:title" content={seoTags.twitter.title} />
+    <meta name="twitter:description" content={seoTags.twitter.description} />
+    <meta name="twitter:image" content={seoTags.twitter.image} />
+    <meta name="theme-color" content="#0B0B0B" />
+    <link rel="icon" type="image/svg+xml" href={settings.favicon} />
+    {alternateLocales.map((alt) => (
+      <link rel="alternate" hreflang={alt.locale} href={`${settings.siteUrl}${alt.url}`} />
+    ))}
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={`${settings.siteUrl}${getLocalizedUrl(canonicalSlug, DEFAULT_LOCALE)}`}
+    />
+    <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+    <slot name="head" />
+    {gtmId && (
+      <>
+        <script>
+          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','${gtmId}');`}
+        </script>
+      </>
+    )}
+  </head>
+  <body>
+    {gtmId && (
+      <noscript>
+        <iframe
+          src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+          height="0"
+          width="0"
+          style="display:none;visibility:hidden"
+        />
+      </noscript>
+    )}
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <slot name="header" />
+    <main id="main-content">
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-bg-surface);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-pill);
+    transform: translateY(-200%);
+    transition: transform var(--transition-fast);
+    z-index: 1000;
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+</style>

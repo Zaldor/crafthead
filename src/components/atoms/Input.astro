@@ -1,0 +1,60 @@
+---
+/**
+ * @fileoverview Accessible input atom supporting text-like inputs.
+ */
+interface Props {
+  id: string;
+  name: string;
+  type?: string;
+  placeholder?: string;
+  required?: boolean;
+  autoComplete?: string;
+  ariaInvalid?: 'true' | 'false';
+  ariaDescribedby?: string;
+}
+
+const {
+  id,
+  name,
+  type = 'text',
+  placeholder,
+  required = false,
+  autoComplete,
+  ariaInvalid,
+  ariaDescribedby,
+} = Astro.props;
+---
+<input
+  class="c-input"
+  id={id}
+  name={name}
+  type={type}
+  placeholder={placeholder}
+  required={required}
+  autocomplete={autoComplete}
+  aria-invalid={ariaInvalid}
+  aria-describedby={ariaDescribedby}
+/>
+
+<style>
+  .c-input {
+    width: 100%;
+    height: var(--input-height);
+    padding-inline: var(--input-padding-x);
+    border-radius: var(--input-radius);
+    border: var(--input-border-width) solid var(--input-border-color);
+    background: var(--input-bg);
+    color: var(--input-text);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .c-input::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  .c-input:focus-visible {
+    border-color: var(--color-border-focus);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 25%, transparent);
+    outline: none;
+  }
+</style>

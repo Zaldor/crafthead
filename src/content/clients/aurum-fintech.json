@@ -1,0 +1,9 @@
+{
+  "name": "Aurum",
+  "slug": "aurum-fintech",
+  "logo": "/images/clients/aurum.svg",
+  "logoAlt": "Aurum fintech logotype",
+  "category": "Fintech",
+  "website": "https://aurum.example.com",
+  "featured": true
+}

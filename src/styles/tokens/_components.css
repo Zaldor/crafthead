@@ -1,0 +1,33 @@
+:root {
+  /* Button */
+  --button-padding-y: var(--space-2-5);
+  --button-padding-x: var(--space-5);
+  --button-radius: var(--radius-pill);
+  --button-font-size: var(--font-size-sm);
+  --button-font-weight: var(--font-weight-semibold);
+  --button-gap: var(--space-2);
+
+  /* Card */
+  --card-radius: var(--radius-lg);
+  --card-padding: var(--space-6);
+  --card-gap: var(--space-4);
+  --card-shadow: var(--shadow-md);
+
+  /* Section spacing */
+  --section-padding-y: clamp(4rem, 12vw, 8rem);
+  --section-padding-x: clamp(1.5rem, 4vw, 4rem);
+  --section-gap: clamp(2rem, 6vw, 4rem);
+
+  /* Form controls */
+  --input-height: 3.25rem;
+  --input-padding-x: var(--space-4);
+  --input-radius: var(--radius-md);
+  --input-border-width: 1px;
+  --input-border-color: var(--color-border-muted);
+  --input-bg: var(--color-bg-surface);
+  --input-text: var(--color-text-primary);
+
+  /* Heading */
+  --heading-letter-spacing: -0.03em;
+  --heading-line-height: 1.05;
+}

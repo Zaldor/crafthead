@@ -1,0 +1,46 @@
+body {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  background: var(--color-bg-body);
+  color: var(--color-text-primary);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--heading-letter-spacing);
+  line-height: var(--heading-line-height);
+}
+
+h1 {
+  font-size: clamp(3rem, 8vw, 4.5rem);
+}
+
+h2 {
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+}
+
+h3 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+p {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text-secondary);
+}
+
+strong {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+small {
+  font-size: var(--font-size-sm);
+}

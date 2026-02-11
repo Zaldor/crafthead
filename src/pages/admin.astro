@@ -1,0 +1,25 @@
+---
+// Convenience route so `/admin` works during `astro dev` and on static hosts.
+// Decap CMS itself is served from the static file in `public/admin/index.html`.
+export const prerender = true;
+
+const target = '/admin/index.html';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Redirecting to CMS…</title>
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={target} />
+  </head>
+  <body>
+    <p>
+      Redirecting to the CMS…
+      <a href={target}>Open CMS</a>
+    </p>
+  </body>
+</html>
+

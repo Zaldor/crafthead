@@ -1,0 +1,30 @@
+---
+/**
+ * @fileoverview Accessible form label atom with optional required indicator.
+ */
+interface Props {
+  for: string;
+  required?: boolean;
+}
+
+const { for: htmlFor, required = false } = Astro.props;
+---
+<label class="c-label" for={htmlFor}>
+  <slot />
+  {required && <span aria-hidden="true">*</span>}
+</label>
+
+<style>
+  .c-label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .c-label span {
+    color: var(--color-accent);
+  }
+</style>

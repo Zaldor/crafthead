@@ -1,0 +1,14 @@
+{
+  "siteTitle": "Crafthead — Creative & Strategic Design Agency",
+  "siteDescription": "Crafthead is a design agency crafting high-stakes brand and digital experiences for ambitious businesses.",
+  "siteUrl": "https://crafthead.studio",
+  "logo": "/logo-mark.svg",
+  "favicon": "/favicon.svg",
+  "email": "hello@crafthead.studio",
+  "phone": "+44 20 7946 0998",
+  "address": "Remote-first with presence in Europe",
+  "socialLinks": {
+    "linkedin": "https://www.linkedin.com/company/crafthead",
+    "instagram": "https://www.instagram.com/crafthead.studio"
+  }
+}

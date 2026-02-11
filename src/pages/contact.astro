@@ -1,0 +1,35 @@
+---
+/**
+ * @fileoverview Contact page for Crafthead.
+ */
+import ContactLayout from '@/components/templates/ContactLayout.astro';
+import { getCollection } from 'astro:content';
+
+const pages = await getCollection('pages', ({ data }) => data.slugBase === 'contact' && data.locale === 'en');
+const pageContent = pages[0];
+
+if (!pageContent) {
+  throw new Error('Contact page content not found.');
+}
+
+const clients = await getCollection('clients');
+---
+<ContactLayout
+  content={{
+    ...pageContent.data,
+    locale: pageContent.data.locale,
+    slugBase: pageContent.data.slugBase,
+    title: pageContent.data.title,
+    hero: pageContent.data.hero,
+    seo: {
+      metaTitle: pageContent.data.seo?.metaTitle,
+      metaDescription: pageContent.data.seo?.metaDescription,
+    },
+  }}
+  clients={clients.map((client) => ({
+    name: client.data.name,
+    logo: client.data.logo,
+    logoAlt: client.data.logoAlt,
+    website: client.data.website,
+  }))}
+/>

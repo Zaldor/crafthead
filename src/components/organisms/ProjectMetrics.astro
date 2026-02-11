@@ -1,0 +1,48 @@
+---
+/**
+ * @fileoverview Project metrics grid organism.
+ */
+import Metric from '@/components/atoms/Metric.astro';
+
+interface MetricItem {
+  label: string;
+  value: string;
+  description?: string;
+}
+
+interface Props {
+  metrics?: MetricItem[];
+}
+
+const { metrics = [] } = Astro.props;
+---
+{metrics.length > 0 && (
+  <section class="c-project-metrics section section--tight">
+    <div class="container">
+      <h2>Results</h2>
+      <div class="c-project-metrics__grid">
+        {metrics.map((metric) => (
+          <Metric label={metric.label} value={metric.value} description={metric.description} />
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .c-project-metrics__grid {
+    margin-top: var(--space-6);
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 960px) {
+    .c-project-metrics__grid {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+  }
+
+  h2 {
+    font-size: clamp(2rem, 5vw, 3rem);
+  }
+</style>

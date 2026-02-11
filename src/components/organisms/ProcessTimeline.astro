@@ -1,0 +1,69 @@
+---
+/**
+ * @fileoverview Process timeline organism describing engagement phases.
+ */
+interface Step {
+  title: string;
+  description: string;
+}
+
+interface Props {
+  heading: string;
+  steps: Step[];
+}
+
+const { heading, steps } = Astro.props;
+const hasSteps = steps.length > 0;
+---
+{hasSteps && (
+  <section class="c-process section">
+  <div class="container">
+    <h2>{heading}</h2>
+    <ol class="c-process__list">
+      {steps.map((step, index) => (
+        <li>
+          <div class="c-process__index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</div>
+          <div>
+            <h3>{step.title}</h3>
+            <p>{step.description}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+)}
+
+<style>
+  .c-process__list {
+    list-style: none;
+    margin: var(--space-8) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .c-process__list li {
+    display: grid;
+    gap: var(--space-4);
+    padding: var(--space-6);
+    border-radius: var(--card-radius);
+    border: 1px solid color-mix(in srgb, var(--color-border-subtle) 60%, transparent);
+    background: color-mix(in srgb, var(--color-bg-surface) 85%, transparent);
+  }
+
+  .c-process__index {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--color-text-highlight);
+    letter-spacing: 0.1em;
+  }
+
+  .c-process__list h3 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .c-process__list p {
+    color: var(--color-text-secondary);
+  }
+</style>

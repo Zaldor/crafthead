@@ -1,0 +1,124 @@
+---
+/**
+ * @fileoverview Global site footer with contact details and navigation.
+ */
+import TextLink from '@/components/atoms/TextLink.astro';
+import settings from '@/data/settings.json';
+
+const year = new Date().getFullYear();
+const navGroups = [
+  {
+    heading: 'Navigate',
+    links: [
+      { label: 'Home', href: '/' },
+      { label: 'Services', href: '/services' },
+      { label: 'Projects', href: '/projects' },
+      { label: 'About', href: '/about' },
+      { label: 'Contact', href: '/contact' },
+    ],
+  },
+  {
+    heading: 'Connect',
+    links: [
+      { label: 'LinkedIn', href: settings.socialLinks.linkedin },
+      { label: 'Instagram', href: settings.socialLinks.instagram },
+    ].filter((link) => Boolean(link.href)),
+  },
+];
+---
+<footer class="c-site-footer">
+  <div class="container c-site-footer__grid">
+    <div class="c-site-footer__brand">
+      <span>Crafthead</span>
+      <p>{settings.siteDescription}</p>
+      <div class="c-site-footer__contact">
+        <a href={`mailto:${settings.email}`}>{settings.email}</a>
+        {settings.phone && <a href={`tel:${settings.phone}`}>{settings.phone}</a>}
+      </div>
+    </div>
+    {navGroups.map((group) => (
+      <div class="c-site-footer__column">
+        <h3>{group.heading}</h3>
+        <ul>
+          {group.links.map((link) => (
+            <li>
+              <TextLink href={link.href}>{link.label}</TextLink>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+  <div class="c-site-footer__sub">
+    <div class="container">
+      <small>© {year} Crafthead Studio. All rights reserved.</small>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .c-site-footer {
+    padding-block: clamp(3rem, 6vw, 5rem);
+    background: var(--color-bg-surface);
+    border-top: 1px solid var(--color-border-subtle);
+    margin-top: clamp(4rem, 8vw, 6rem);
+  }
+
+  .c-site-footer__grid {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  @media (min-width: 768px) {
+    .c-site-footer__grid {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+  }
+
+  .c-site-footer__brand span {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .c-site-footer__brand p {
+    margin-top: var(--space-3);
+    max-width: 32ch;
+  }
+
+  .c-site-footer__contact {
+    display: grid;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .c-site-footer__contact a {
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+
+  .c-site-footer__column h3 {
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-text-muted);
+  }
+
+  .c-site-footer__column ul {
+    list-style: none;
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .c-site-footer__sub {
+    margin-top: clamp(2rem, 5vw, 3rem);
+    border-top: 1px solid var(--color-border-subtle);
+    padding-block: var(--space-4);
+  }
+
+  .c-site-footer__sub small {
+    color: var(--color-text-muted);
+  }
+</style>

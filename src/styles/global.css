@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=General+Sans:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+@import './tokens/_primitives.css';
+@import './tokens/_semantic.css';
+@import './tokens/_components.css';
+@import './base/_reset.css';
+@import './base/_typography.css';
+@import './utilities/_layout.css';
+
+body {
+  background: radial-gradient(
+      circle at 0% 0%,
+      color-mix(in srgb, var(--color-yellow-500) 10%, transparent) 0%,
+      transparent 45%
+    ),
+    var(--color-bg-body);
+}
+
+main {
+  display: grid;
+  gap: clamp(4rem, 8vw, 6rem);
+}

@@ -1,0 +1,57 @@
+---
+/**
+ * @fileoverview About page for Crafthead.
+ */
+import DefaultPageLayout from '@/components/templates/DefaultPageLayout.astro';
+import ClientsShowcase from '@/components/organisms/ClientsShowcase.astro';
+import TestimonialsShowcase from '@/components/organisms/TestimonialsShowcase.astro';
+import ConsultationCTA from '@/components/organisms/ConsultationCTA.astro';
+import { getCollection } from 'astro:content';
+
+const pages = await getCollection('pages', ({ data }) => data.slugBase === 'about' && data.locale === 'en');
+const pageContent = pages[0];
+
+if (!pageContent) {
+  throw new Error('About page content not found.');
+}
+
+const clients = await getCollection('clients');
+const testimonials = await getCollection('testimonials');
+---
+<DefaultPageLayout content={{
+  ...pageContent.data,
+  locale: pageContent.data.locale,
+  slugBase: pageContent.data.slugBase,
+  title: pageContent.data.title,
+  hero: pageContent.data.hero,
+  sections: pageContent.data.sections,
+  seo: {
+    metaTitle: pageContent.data.seo?.metaTitle,
+    metaDescription: pageContent.data.seo?.metaDescription,
+    ogImage: pageContent.data.seo?.ogImage,
+  },
+}}>
+  <ClientsShowcase
+    heading="Embedded with leaders across continents"
+    subheading="Our senior team collaborates with founders, CMOs, and product leads in Europe, the UK, and beyond."
+    clients={clients.map((client) => ({
+      name: client.data.name,
+      logo: client.data.logo,
+      logoAlt: client.data.logoAlt,
+      website: client.data.website,
+    }))}
+  />
+  <TestimonialsShowcase
+    heading="Partners on the record"
+    testimonials={testimonials.map((testimonial) => ({
+      quote: testimonial.data.quote,
+      clientName: testimonial.data.clientName,
+      clientRole: testimonial.data.clientRole,
+      company: testimonial.data.company,
+    }))}
+  />
+  <ConsultationCTA
+    heading="Let’s orchestrate your next chapter"
+    subheading="We build teams and systems around the most important initiatives on your roadmap."
+  />
+</DefaultPageLayout>

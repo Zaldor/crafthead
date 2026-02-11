@@ -1,0 +1,29 @@
+---
+/**
+ * @fileoverview CTA stack molecule combining primary and secondary actions.
+ */
+import Button from '@/components/atoms/Button.astro';
+import TextLink from '@/components/atoms/TextLink.astro';
+
+interface Props {
+  primaryLabel: string;
+  primaryHref: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+}
+
+const { primaryLabel, primaryHref, secondaryLabel, secondaryHref } = Astro.props;
+---
+<div class="c-cta-stack">
+  <Button href={primaryHref} label={primaryLabel} variant="primary" size="lg" />
+  {secondaryLabel && secondaryHref && <TextLink href={secondaryHref}>{secondaryLabel}</TextLink>}
+</div>
+
+<style>
+  .c-cta-stack {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+  }
+</style>

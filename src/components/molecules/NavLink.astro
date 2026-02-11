@@ -1,0 +1,40 @@
+---
+/**
+ * @fileoverview Navigation link molecule with active-state detection.
+ */
+interface Props {
+  href: string;
+  label: string;
+  isActive?: boolean;
+}
+
+const { href, label, isActive = false } = Astro.props;
+---
+<a class:list={{ 'c-nav-link': true, 'is-active': isActive }} href={href}>
+  {label}
+</a>
+
+<style>
+  .c-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-pill);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+    transition: color var(--transition-fast), background var(--transition-fast);
+  }
+
+  .c-nav-link:hover,
+  .c-nav-link:focus-visible {
+    color: var(--color-text-primary);
+    background: color-mix(in srgb, var(--color-bg-subtle) 60%, transparent);
+  }
+
+  .c-nav-link.is-active {
+    color: var(--color-text-primary);
+    background: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  }
+</style>

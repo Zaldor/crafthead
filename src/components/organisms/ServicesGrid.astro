@@ -1,0 +1,53 @@
+---
+/**
+ * @fileoverview Services grid organism.
+ */
+import ServiceCard from '@/components/molecules/ServiceCard.astro';
+
+interface ServiceItem {
+  title: string;
+  description: string;
+  href?: string;
+}
+
+interface Props {
+  heading: string;
+  items: ServiceItem[];
+}
+
+const { heading, items } = Astro.props;
+const hasItems = items.length > 0;
+---
+{hasItems && (
+  <section class="c-services section">
+  <div class="container">
+    <div class="c-services__header">
+      <h2>{heading}</h2>
+    </div>
+    <div class="c-services__grid">
+      {items.map((item) => (
+        <ServiceCard title={item.title} description={item.description} href={item.href} />
+      ))}
+    </div>
+  </div>
+</section>
+)}
+
+<style>
+  .c-services__header h2 {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    max-width: 12ch;
+  }
+
+  .c-services__grid {
+    margin-top: var(--space-8);
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 900px) {
+    .c-services__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

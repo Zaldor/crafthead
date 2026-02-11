@@ -1,0 +1,48 @@
+---
+/**
+ * @fileoverview Metric atom for key results.
+ */
+interface Props {
+  label: string;
+  value: string;
+  description?: string;
+}
+
+const { label, value, description } = Astro.props;
+---
+<div class="c-metric">
+  <span class="c-metric__value">{value}</span>
+  <span class="c-metric__label">{label}</span>
+  {description && <p class="c-metric__description">{description}</p>}
+</div>
+
+<style>
+  .c-metric {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--color-bg-subtle) 70%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-border-subtle) 60%, transparent);
+  }
+
+  .c-metric__value {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--color-text-highlight);
+  }
+
+  .c-metric__label {
+    text-transform: uppercase;
+    font-size: var(--font-size-xs);
+    letter-spacing: 0.18em;
+    color: var(--color-text-secondary);
+  }
+
+  .c-metric__description {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+  }
+</style>

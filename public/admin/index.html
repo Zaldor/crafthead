@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Crafthead CMS</title>
+    <!--
+      IMPORTANT:
+      - This file is intended to be served as a static asset.
+      - If you see a blank screen locally, it may be because your browser
+        session blocks external network requests (unpkg) in this environment.
+        In a normal browser it will load fine.
+    -->
+    <link rel="stylesheet" href="https://unpkg.com/@decapcms/app@^3.0.0/dist/decap-cms.css" />
+  </head>
+  <body>
+    <script src="https://unpkg.com/@decapcms/app@^3.0.0/dist/decap-cms.js"></script>
+    <script>
+      window.CMS_MANUAL_INIT = true;
+      const cmsConfig = {
+        config: {
+          load_config_file: true,
+        },
+      };
+      window.DecapCMS.init(cmsConfig);
+    </script>
+  </body>
+</html>

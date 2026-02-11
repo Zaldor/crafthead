@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" role="img" aria-label="Aurum gallery 01">
+  <rect width="1400" height="900" fill="#121212" />
+  <rect x="140" y="120" width="480" height="660" rx="32" fill="#FFD400" opacity="0.12" />
+  <rect x="220" y="200" width="320" height="500" rx="28" fill="#FFD400" opacity="0.22" />
+  <rect x="680" y="160" width="580" height="320" rx="32" fill="#0B0B0B" stroke="#FFD400" stroke-width="6" />
+  <rect x="680" y="520" width="420" height="220" rx="28" fill="#1F1F1F" stroke="#FFD400" stroke-width="4" />
+  <text x="220" y="820" fill="#FFD400" font-family="'Work Sans', sans-serif" font-size="54" font-weight="600">Aurum identity system</text>
+</svg>

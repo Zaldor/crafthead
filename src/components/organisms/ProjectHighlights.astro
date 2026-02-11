@@ -1,0 +1,123 @@
+---
+/**
+ * @fileoverview Project highlights organism combining overview copy, services, and deliverables.
+ */
+import Tag from '@/components/atoms/Tag.astro';
+
+interface Props {
+  client: string;
+  industry: string;
+  services: string[];
+  deliverables?: string[];
+  toolsUsed?: string[];
+  location?: string;
+}
+
+const { client, industry, services, deliverables, toolsUsed, location } = Astro.props;
+---
+<section class="c-project-highlights section section--tight">
+  <div class="container c-project-highlights__grid">
+    <div>
+      <h2>Project snapshot</h2>
+      <dl>
+        <div>
+          <dt>Client</dt>
+          <dd>{client}</dd>
+        </div>
+        <div>
+          <dt>Industry</dt>
+          <dd>{industry}</dd>
+        </div>
+        {location && (
+          <div>
+            <dt>Location</dt>
+            <dd>{location}</dd>
+          </div>
+        )}
+      </dl>
+    </div>
+    <div>
+      <h3>Services</h3>
+      <ul class="c-project-highlights__list">
+        {services.map((item) => (
+          <li>
+            <Tag tone="default">{item}</Tag>
+          </li>
+        ))}
+      </ul>
+      {deliverables && (
+        <div class="c-project-highlights__stack">
+          <h3>Deliverables</h3>
+          <ul>
+            {deliverables.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {toolsUsed && (
+        <div class="c-project-highlights__stack">
+          <h3>Tools</h3>
+          <ul>
+            {toolsUsed.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .c-project-highlights__grid {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  @media (min-width: 960px) {
+    .c-project-highlights__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  dl {
+    margin: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  dt {
+    text-transform: uppercase;
+    font-size: var(--font-size-xs);
+    letter-spacing: 0.2em;
+    color: var(--color-text-muted);
+  }
+
+  dd {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    color: var(--color-text-primary);
+  }
+
+  .c-project-highlights__list {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-4) 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .c-project-highlights__stack {
+    margin-top: var(--space-6);
+  }
+
+  .c-project-highlights__stack ul {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-2) 0 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+</style>

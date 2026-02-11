@@ -1,0 +1,217 @@
+---
+/**
+ * @fileoverview Case study template combining hero, highlights, metrics, narrative, and gallery.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SiteHeader from '@/components/organisms/SiteHeader.astro';
+import SiteFooter from '@/components/organisms/SiteFooter.astro';
+import ProjectHighlights from '@/components/organisms/ProjectHighlights.astro';
+import ProjectMetrics from '@/components/organisms/ProjectMetrics.astro';
+import ProjectGallery from '@/components/organisms/ProjectGallery.astro';
+import TestimonialCard from '@/components/molecules/TestimonialCard.astro';
+import { projectSchema } from '@/utils/schema';
+import type { SEOMetadata } from '@/utils/seo';
+
+interface NarrativeSection {
+  type: 'narrative';
+  heading: string;
+  body: string;
+}
+
+interface GallerySection {
+  type: 'gallery';
+  images: Array<{ image: string; alt: string; caption?: string }>;
+}
+
+export type ProjectSection = NarrativeSection | GallerySection;
+
+interface ProjectContent {
+  slug: string;
+  slugBase: string;
+  locale: string;
+  title: string;
+  summary: string;
+  client: string;
+  industry: string;
+  services: string[];
+  projectDate?: Date;
+  location?: string;
+  heroImage: string;
+  heroImageAlt: string;
+  deliverables?: string[];
+  toolsUsed?: string[];
+  keyResults?: Array<{ label: string; value: string; description?: string }>;
+  sections?: ProjectSection[];
+  testimonials?: Array<{ quote: string; clientName: string; clientRole: string; company: string }>;
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    ogImage?: string;
+  };
+}
+
+interface Props {
+  content: ProjectContent;
+}
+
+const { content } = Astro.props;
+const seo: SEOMetadata = {
+  title: content.seo?.metaTitle ?? `${content.title} — Case Study | Crafthead`,
+  description: content.seo?.metaDescription ?? content.summary,
+  ogImage: content.seo?.ogImage ?? content.heroImage,
+  ogType: 'article',
+  publishDate: content.projectDate,
+};
+
+const structuredData = projectSchema({
+  title: content.title,
+  description: content.summary,
+  url: `https://crafthead.studio/projects/${content.slug}`,
+  image: content.heroImage,
+  client: content.client,
+  projectDate: content.projectDate,
+  services: content.services,
+  results: content.keyResults,
+});
+---
+<BaseLayout seo={seo} lang={content.locale} slugBase={content.slugBase}>
+  <Fragment slot="header">
+    <SiteHeader />
+  </Fragment>
+
+  <section class="c-case-hero section section--tight">
+    <div class="container c-case-hero__grid">
+      <div class="c-case-hero__copy">
+        <p class="c-case-hero__eyebrow">Case Study</p>
+        <h1>{content.title}</h1>
+        <p class="c-case-hero__summary">{content.summary}</p>
+        <ul class="c-case-hero__meta">
+          <li><strong>Client:</strong> {content.client}</li>
+          <li><strong>Industry:</strong> {content.industry}</li>
+          {content.projectDate && (
+            <li><strong>Year:</strong> {new Date(content.projectDate).getFullYear()}</li>
+          )}
+        </ul>
+      </div>
+      <figure class="c-case-hero__media">
+        <img src={content.heroImage} alt={content.heroImageAlt} loading="eager" decoding="async" />
+      </figure>
+    </div>
+  </section>
+
+  <ProjectHighlights
+    client={content.client}
+    industry={content.industry}
+    services={content.services}
+    deliverables={content.deliverables}
+    toolsUsed={content.toolsUsed}
+    location={content.location}
+  />
+
+  <ProjectMetrics metrics={content.keyResults} />
+
+  {content.sections?.map((section) => {
+    if (section.type === 'narrative') {
+      return (
+        <section class="section section--tight">
+          <div class="container c-case-narrative">
+            <h2>{section.heading}</h2>
+            <p>{section.body}</p>
+          </div>
+        </section>
+      );
+    }
+
+    if (section.type === 'gallery') {
+      return <ProjectGallery items={section.images} />;
+    }
+  })}
+
+  {content.testimonials?.length && (
+    <section class="section section--tight">
+      <div class="container c-case-testimonials">
+        <h2>Client perspective</h2>
+        <div class="c-case-testimonials__grid">
+          {content.testimonials.map((testimonial) => (
+            <TestimonialCard
+              quote={testimonial.quote}
+              clientName={testimonial.clientName}
+              clientRole={testimonial.clientRole}
+              company={testimonial.company}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <Fragment slot="footer">
+    <SiteFooter />
+  </Fragment>
+
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(structuredData)} />
+</BaseLayout>
+
+<style>
+  .c-case-hero__grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 960px) {
+    .c-case-hero__grid {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+  }
+
+  .c-case-hero__eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+  }
+
+  .c-case-hero__summary {
+    font-size: clamp(1.15rem, 3vw, 1.55rem);
+    color: var(--color-text-secondary);
+    max-width: 64ch;
+  }
+
+  .c-case-hero__meta {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding: 0;
+    margin: 0;
+    color: var(--color-text-secondary);
+  }
+
+  .c-case-hero__media img {
+    width: 100%;
+    border-radius: var(--card-radius);
+    border: 1px solid color-mix(in srgb, var(--color-border-subtle) 60%, transparent);
+  }
+
+  .c-case-narrative {
+    display: grid;
+    gap: var(--space-4);
+    max-width: 72ch;
+  }
+
+  .c-case-narrative h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .c-case-testimonials__grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 960px) {
+    .c-case-testimonials__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

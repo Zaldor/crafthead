@@ -1,0 +1,65 @@
+---
+/**
+ * @fileoverview Contact form field molecule handling labels, inputs, errors.
+ */
+import Label from '@/components/atoms/Label.astro';
+import Input from '@/components/atoms/Input.astro';
+import Textarea from '@/components/atoms/Textarea.astro';
+
+interface Props {
+  id: string;
+  label: string;
+  type?: 'text' | 'email' | 'textarea';
+  required?: boolean;
+  error?: string;
+  placeholder?: string;
+  autoComplete?: string;
+}
+
+const { id, label, type = 'text', required = false, error, placeholder, autoComplete } = Astro.props;
+const describedBy = error ? `${id}-error` : undefined;
+---
+<div class="c-contact-field">
+  <Label for={id} required={required}>
+    {label}
+  </Label>
+  {type === 'textarea' ? (
+    <Textarea
+      id={id}
+      name={id}
+      placeholder={placeholder}
+      required={required}
+      ariaInvalid={error ? 'true' : 'false'}
+      ariaDescribedby={describedBy}
+    />
+  ) : (
+    <Input
+      id={id}
+      name={id}
+      type={type}
+      placeholder={placeholder}
+      required={required}
+      autoComplete={autoComplete}
+      ariaInvalid={error ? 'true' : 'false'}
+      ariaDescribedby={describedBy}
+    />
+  )}
+  {error && (
+    <p id={describedBy} class="c-contact-field__error" role="alert">
+      {error}
+    </p>
+  )}
+</div>
+
+<style>
+  .c-contact-field {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .c-contact-field__error {
+    color: var(--color-red-500);
+    font-size: var(--font-size-sm);
+    margin: 0;
+  }
+</style>

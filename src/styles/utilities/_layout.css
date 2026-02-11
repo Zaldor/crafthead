@@ -1,0 +1,33 @@
+.container {
+  width: min(1120px, 100% - 2 * var(--section-padding-x));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: var(--section-padding-y);
+  padding-inline: var(--section-padding-x);
+  display: grid;
+  gap: var(--section-gap);
+}
+
+.section--tight {
+  padding-block: clamp(3rem, 10vw, 5rem);
+}
+
+.stacked {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.grid-auto-fill {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+}

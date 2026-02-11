@@ -1,0 +1,55 @@
+---
+/**
+ * @fileoverview Testimonial card molecule.
+ */
+import VisuallyHidden from '@/components/atoms/VisuallyHidden.astro';
+
+interface Props {
+  quote: string;
+  clientName: string;
+  clientRole: string;
+  company: string;
+}
+
+const { quote, clientName, clientRole, company } = Astro.props;
+---
+<figure class="c-testimonial">
+  <VisuallyHidden>Testimonial</VisuallyHidden>
+  <blockquote>{quote}</blockquote>
+  <figcaption>
+    <span class="c-testimonial__name">{clientName}</span>
+    <span class="c-testimonial__role">{clientRole}, {company}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .c-testimonial {
+    display: grid;
+    gap: var(--space-4);
+    padding: var(--space-6);
+    border-radius: var(--card-radius);
+    background: color-mix(in srgb, var(--color-bg-subtle) 70%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-border-subtle) 60%, transparent);
+  }
+
+  blockquote {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-primary);
+  }
+
+  figcaption {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .c-testimonial__name {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+  }
+
+  .c-testimonial__role {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+</style>

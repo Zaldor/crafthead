@@ -1,0 +1,121 @@
+---
+/**
+ * @fileoverview Contact page template combining hero, form, and trust signals.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SiteHeader from '@/components/organisms/SiteHeader.astro';
+import SiteFooter from '@/components/organisms/SiteFooter.astro';
+import Hero from '@/components/organisms/Hero.astro';
+import ContactForm from '@/components/organisms/ContactForm.astro';
+import ClientsShowcase from '@/components/organisms/ClientsShowcase.astro';
+import ConsultationCTA from '@/components/organisms/ConsultationCTA.astro';
+import settings from '@/data/settings.json';
+
+interface ContactPageContent {
+  locale: string;
+  slugBase: string;
+  title: string;
+  hero?: {
+    eyebrow?: string;
+    heading: string;
+    subheading?: string;
+    primaryCtaLabel?: string;
+    primaryCtaUrl?: string;
+  };
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+  };
+}
+
+interface Props {
+  content: ContactPageContent;
+  clients: Array<{ name: string; logo: string; logoAlt: string; website?: string }>;
+}
+
+const { content, clients } = Astro.props;
+const heroContent = content.hero ?? {
+  heading: content.title,
+  subheading: 'Share the stakes and we’ll schedule a working session to map next steps.',
+  primaryCtaLabel: 'Book consultation',
+  primaryCtaUrl: '#consultation',
+};
+---
+<BaseLayout seo={{
+  title: content.seo?.metaTitle ?? `${content.title} — Crafthead`,
+  description: content.seo?.metaDescription ?? heroContent.subheading ?? '',
+}} lang={content.locale} slugBase={content.slugBase}>
+  <Fragment slot="header">
+    <SiteHeader />
+  </Fragment>
+
+  {heroContent && <Hero content={heroContent} />}
+
+  <section class="section section--tight">
+    <div class="container c-contact-layout__grid">
+      <div class="c-contact-layout__details">
+        <h2>Let’s talk details</h2>
+        <p>
+          Share the stakes, the timeline, and the outcomes you’re aiming for. We’ll schedule a working session to map the right engagement.
+        </p>
+        <ul>
+          <li><strong>Email:</strong> <a href={`mailto:${settings.email}`}>{settings.email}</a></li>
+          {settings.phone && (
+            <li>
+              <strong>Phone:</strong>{' '}
+              <a href={`tel:${settings.phone.replace(/\s+/g, '')}`}>{settings.phone}</a>
+            </li>
+          )}
+        </ul>
+      </div>
+      <ContactForm />
+    </div>
+  </section>
+
+  <ClientsShowcase
+    heading="Recent partners"
+    subheading="From fintech to hospitality, we partner with teams who value strategic design with measurable impact."
+    clients={clients}
+  />
+
+  <ConsultationCTA
+    heading="Have a high-stakes launch on the horizon?"
+    subheading="Let’s architect the brand, product, and campaign workstreams together."
+  />
+
+  <Fragment slot="footer">
+    <SiteFooter />
+  </Fragment>
+</BaseLayout>
+
+<style>
+  .c-contact-layout__grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 1024px) {
+    .c-contact-layout__grid {
+      grid-template-columns: minmax(0, 0.65fr) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+
+  .c-contact-layout__details {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .c-contact-layout__details ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .c-contact-layout__details a {
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+</style>

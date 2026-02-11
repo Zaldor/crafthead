@@ -1,0 +1,71 @@
+---
+/**
+ * @fileoverview Projects listing page.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SiteHeader from '@/components/organisms/SiteHeader.astro';
+import SiteFooter from '@/components/organisms/SiteFooter.astro';
+import ProjectCard from '@/components/molecules/ProjectCard.astro';
+import Heading from '@/components/atoms/Heading.astro';
+import { getCollection } from 'astro:content';
+import { sortProjectsByDate } from '@/utils/content';
+
+const projects = sortProjectsByDate(await getCollection('projects', ({ data }) => data.locale === 'en' && !data.draft));
+---
+<BaseLayout seo={{
+  title: 'Projects — Crafthead',
+  description: 'Explore case studies showcasing Crafthead’s strategic brand, product, and launch work.',
+}} slugBase="projects">
+  <Fragment slot="header">
+    <SiteHeader />
+  </Fragment>
+
+  <section class="section section--tight">
+    <div class="container">
+      <Heading as="h1" size="xl" eyebrow="Case studies">
+        Selected work shaping brands and products
+      </Heading>
+      <p class="projects-intro">
+        Every engagement is designed to translate business stakes into expressive outcomes. Explore how we partner with teams to launch, relaunch, and accelerate.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container c-projects-grid">
+      {projects.map((project) => (
+        <ProjectCard
+          title={project.data.title}
+          summary={project.data.summary}
+          services={project.data.services}
+          client={project.data.client}
+          heroImage={project.data.heroImage}
+          heroImageAlt={project.data.heroImageAlt}
+          href={`/projects/${project.slug}`}
+        />
+      ))}
+    </div>
+  </section>
+
+  <Fragment slot="footer">
+    <SiteFooter />
+  </Fragment>
+</BaseLayout>
+
+<style>
+  .projects-intro {
+    margin-top: var(--space-4);
+    max-width: 64ch;
+  }
+
+  .c-projects-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 900px) {
+    .c-projects-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

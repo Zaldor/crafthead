@@ -1,0 +1,66 @@
+---
+/**
+ * @fileoverview Project gallery organism with responsive layout.
+ */
+interface GalleryItem {
+  image: string;
+  alt: string;
+  caption?: string;
+}
+
+interface Props {
+  items?: GalleryItem[];
+}
+
+const { items = [] } = Astro.props;
+---
+{items.length > 0 && (
+  <section class="c-project-gallery section section--tight">
+    <div class="container c-project-gallery__grid">
+      {items.map((item, index) => (
+        <figure class:list={{ 'c-project-gallery__item': true, 'is-large': index % 3 === 0 }}>
+          <img src={item.image} alt={item.alt} loading="lazy" decoding="async" />
+          {item.caption && <figcaption>{item.caption}</figcaption>}
+        </figure>
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+  .c-project-gallery__grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 960px) {
+    .c-project-gallery__grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+
+    .c-project-gallery__item {
+      grid-column: span 6;
+    }
+
+    .c-project-gallery__item.is-large {
+      grid-column: span 8;
+    }
+  }
+
+  figure {
+    margin: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  img {
+    width: 100%;
+    border-radius: var(--card-radius);
+    border: 1px solid color-mix(in srgb, var(--color-border-subtle) 60%, transparent);
+  }
+
+  figcaption {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+</style>

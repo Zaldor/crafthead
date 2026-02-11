@@ -1,0 +1,98 @@
+---
+/**
+ * @fileoverview Project card molecule for listing pages.
+ */
+import Tag from '@/components/atoms/Tag.astro';
+import TextLink from '@/components/atoms/TextLink.astro';
+
+interface Props {
+  title: string;
+  summary: string;
+  href: string;
+  services: string[];
+  client: string;
+  heroImage?: string;
+  heroImageAlt?: string;
+}
+
+const { title, summary, href, services, client, heroImage, heroImageAlt } = Astro.props;
+---
+<article class="c-project-card">
+  {heroImage ? (
+    <figure class="c-project-card__media">
+      <img src={heroImage} alt={heroImageAlt ?? title} loading="lazy" decoding="async" />
+    </figure>
+  ) : (
+    <div class="c-project-card__placeholder" aria-hidden="true" />
+  )}
+  <div class="c-project-card__content">
+    <div class="c-project-card__meta">
+      <Tag tone="muted">{client}</Tag>
+    </div>
+    <h3>{title}</h3>
+    <p>{summary}</p>
+    <ul class="c-project-card__services">
+      {services.slice(0, 3).map((service) => (
+        <li>
+          <Tag tone="default">{service}</Tag>
+        </li>
+      ))}
+    </ul>
+    <TextLink href={href}>View case study</TextLink>
+  </div>
+</article>
+
+<style>
+  .c-project-card {
+    display: grid;
+    gap: var(--space-5);
+    padding: var(--card-padding);
+    border-radius: var(--card-radius);
+    background: color-mix(in srgb, var(--color-bg-surface) 65%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-border-subtle) 60%, transparent);
+    transition: transform var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .c-project-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-accent);
+  }
+
+  .c-project-card__media {
+    position: relative;
+    overflow: hidden;
+    border-radius: calc(var(--card-radius) - 0.5rem);
+    aspect-ratio: 16 / 10;
+  }
+
+  .c-project-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .c-project-card__placeholder {
+    height: 200px;
+    border-radius: calc(var(--card-radius) - 0.5rem);
+    background: color-mix(in srgb, var(--color-bg-subtle) 70%, transparent);
+  }
+
+  .c-project-card h3 {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    color: var(--color-text-primary);
+  }
+
+  .c-project-card p {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+  }
+
+  .c-project-card__services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+</style>

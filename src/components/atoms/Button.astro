@@ -1,0 +1,123 @@
+---
+/**
+ * @fileoverview Accessible button atom with variant and size options.
+ */
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'md' | 'lg';
+  iconOnly?: boolean;
+  label?: string;
+  type?: 'button' | 'submit' | 'reset';
+  ariaLabel?: string;
+  target?: '_blank' | '_self' | '_parent' | '_top';
+  rel?: string;
+  disabled?: boolean;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  iconOnly = false,
+  label,
+  type = 'button',
+  ariaLabel,
+  target,
+  rel,
+  disabled = false,
+} = Astro.props;
+
+const classes = [
+  'c-button',
+  `c-button--${variant}`,
+  `c-button--${size}`,
+  iconOnly ? 'c-button--icon' : '',
+]
+  .filter(Boolean)
+  .join(' ');
+
+const shared = {
+  class: classes,
+  'aria-label': ariaLabel,
+  'data-variant': variant,
+  'data-size': size,
+};
+---
+{href ? (
+  <a href={href} target={target} rel={rel} {...shared}>
+    {label && <span>{label}</span>}
+    <slot />
+  </a>
+) : (
+  <button type={type} disabled={disabled} {...shared}>
+    {label && <span>{label}</span>}
+    <slot />
+  </button>
+)}
+
+<style>
+  .c-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--button-gap);
+    padding: var(--button-padding-y) var(--button-padding-x);
+    border-radius: var(--button-radius);
+    font-size: var(--button-font-size);
+    font-weight: var(--button-font-weight);
+    line-height: 1;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    position: relative;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+  }
+
+  .c-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .c-button--primary {
+    background: var(--color-accent);
+    color: var(--color-text-inverse);
+    box-shadow: 0 10px 30px -15px rgb(255 212 0 / 0.6);
+  }
+
+  .c-button--primary:hover:not(:disabled) {
+    background: var(--color-accent-hover);
+    transform: translateY(-1px);
+  }
+
+  .c-button--secondary {
+    background: transparent;
+    color: var(--color-text-primary);
+    border-color: var(--color-border-subtle);
+  }
+
+  .c-button--secondary:hover:not(:disabled) {
+    border-color: var(--color-accent);
+    color: var(--color-text-highlight);
+  }
+
+  .c-button--ghost {
+    background: color-mix(in srgb, var(--color-bg-surface) 80%, transparent);
+    color: var(--color-text-secondary);
+  }
+
+  .c-button--ghost:hover:not(:disabled) {
+    color: var(--color-text-primary);
+  }
+
+  .c-button--lg {
+    padding: calc(var(--button-padding-y) + 0.25rem) calc(var(--button-padding-x) + 0.5rem);
+    font-size: var(--font-size-base);
+  }
+
+  .c-button--icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+  }
+</style>

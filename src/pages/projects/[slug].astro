@@ -1,0 +1,47 @@
+---
+/**
+ * @fileoverview Dynamic project case study page.
+ */
+import CaseStudyLayout from '@/components/templates/CaseStudyLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => data.locale === 'en' && !data.draft);
+
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+
+const testimonials = await getCollection('testimonials', ({ data }) => data.projectSlugBase === project.data.slugBase);
+---
+<CaseStudyLayout
+  content={{
+    slug: project.slug,
+    slugBase: project.data.slugBase,
+    locale: project.data.locale,
+    title: project.data.title,
+    summary: project.data.summary,
+    client: project.data.client,
+    industry: project.data.industry,
+    services: project.data.services,
+    projectDate: project.data.projectDate,
+    location: project.data.location,
+    heroImage: project.data.heroImage,
+    heroImageAlt: project.data.heroImageAlt,
+    deliverables: project.data.deliverables,
+    toolsUsed: project.data.toolsUsed,
+    keyResults: project.data.keyResults,
+    sections: project.data.sections,
+    testimonials: testimonials.map((item) => ({
+      quote: item.data.quote,
+      clientName: item.data.clientName,
+      clientRole: item.data.clientRole,
+      company: item.data.company,
+    })),
+    seo: project.data.seo,
+  }}
+/>

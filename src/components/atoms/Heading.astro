@@ -1,0 +1,61 @@
+---
+/**
+ * @fileoverview Polymorphic heading atom for consistent typography.
+ */
+interface Props {
+  as?: 'h1' | 'h2' | 'h3' | 'h4';
+  align?: 'start' | 'center' | 'end';
+  eyebrow?: string;
+  size?: 'xl' | 'lg' | 'md';
+}
+
+const { as = 'h2', align = 'start', eyebrow, size = 'lg' } = Astro.props;
+const Tag = as;
+---
+<div class={`c-heading c-heading--${align} c-heading--${size}`}>
+  {eyebrow && <span class="c-heading__eyebrow">{eyebrow}</span>}
+  <Tag class="c-heading__title">
+    <slot />
+  </Tag>
+</div>
+
+<style>
+  .c-heading {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .c-heading--center {
+    text-align: center;
+    justify-items: center;
+  }
+
+  .c-heading--end {
+    text-align: end;
+    justify-items: end;
+  }
+
+  .c-heading__eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  .c-heading__title {
+    color: var(--color-text-primary);
+    text-wrap: balance;
+  }
+
+  .c-heading--xl .c-heading__title {
+    font-size: clamp(2.75rem, 6vw, 4.5rem);
+  }
+
+  .c-heading--lg .c-heading__title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .c-heading--md .c-heading__title {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+  }
+</style>

@@ -1,0 +1,47 @@
+:root {
+  --color-bg-body: var(--color-black);
+  --color-bg-surface: var(--color-gray-900);
+  --color-bg-subtle: var(--color-gray-800);
+  --color-bg-inverse: var(--color-white);
+  --color-bg-highlight: var(--color-yellow-500);
+
+  --color-text-primary: var(--color-white);
+  --color-text-secondary: var(--color-gray-300);
+  --color-text-muted: var(--color-gray-400);
+  --color-text-inverse: var(--color-black);
+  --color-text-highlight: var(--color-yellow-500);
+
+  --color-border-subtle: var(--color-gray-700);
+  --color-border-muted: var(--color-gray-600);
+  --color-border-strong: var(--color-gray-400);
+  --color-border-focus: var(--color-yellow-500);
+
+  --color-accent: var(--color-yellow-500);
+  --color-accent-hover: #ffbf00;
+  --color-accent-active: #e0a800;
+  --color-accent-soft: color-mix(in srgb, var(--color-yellow-500) 16%, transparent);
+
+  --text-shadow-glow: 0 2px 16px rgb(255 212 0 / 0.35);
+  --focus-outline: 2px solid var(--color-yellow-500);
+  --focus-outline-offset: 3px;
+
+  color-scheme: dark light;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-bg-body: var(--color-white);
+    --color-bg-surface: var(--color-gray-50);
+    --color-bg-subtle: var(--color-gray-100);
+    --color-bg-inverse: var(--color-black);
+
+    --color-text-primary: var(--color-black);
+    --color-text-secondary: var(--color-gray-600);
+    --color-text-muted: var(--color-gray-500);
+    --color-text-inverse: var(--color-white);
+
+    --color-border-subtle: var(--color-gray-200);
+    --color-border-muted: var(--color-gray-300);
+    --color-border-strong: var(--color-gray-400);
+  }
+}

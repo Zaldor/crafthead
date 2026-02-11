@@ -1,0 +1,71 @@
+---
+/**
+ * @fileoverview Home page for Crafthead Studio.
+ */
+import DefaultPageLayout from '@/components/templates/DefaultPageLayout.astro';
+import FeaturedProjectsRail from '@/components/organisms/FeaturedProjectsRail.astro';
+import ServicesGrid from '@/components/organisms/ServicesGrid.astro';
+import ClientsShowcase from '@/components/organisms/ClientsShowcase.astro';
+import TestimonialsShowcase from '@/components/organisms/TestimonialsShowcase.astro';
+import ConsultationCTA from '@/components/organisms/ConsultationCTA.astro';
+import { getCollection } from 'astro:content';
+import { filterFeaturedProjects, sortProjectsByDate } from '@/utils/content';
+
+const pages = await getCollection('pages', ({ data }) => data.slugBase === 'index' && data.locale === 'en');
+const pageContent = pages[0];
+
+if (!pageContent) {
+  throw new Error('Home page content not found.');
+}
+
+const projects = await getCollection('projects', ({ data }) => data.locale === 'en' && !data.draft);
+const featuredProjects = filterFeaturedProjects(projects);
+const sortedFeatured = featuredProjects.length > 0 ? featuredProjects : sortProjectsByDate(projects).slice(0, 3);
+
+const testimonials = await getCollection('testimonials');
+const clients = await getCollection('clients');
+---
+<DefaultPageLayout content={{
+  ...pageContent.data,
+  locale: pageContent.data.locale,
+  slugBase: pageContent.data.slugBase,
+  title: pageContent.data.title,
+  hero: pageContent.data.hero,
+  sections: pageContent.data.sections,
+  seo: {
+    metaTitle: pageContent.data.seo?.metaTitle,
+    metaDescription: pageContent.data.seo?.metaDescription,
+    ogImage: pageContent.data.seo?.ogImage,
+  },
+}}>
+  <FeaturedProjectsRail projects={sortedFeatured} />
+  <ServicesGrid
+    heading="Strategic design across the product lifecycle"
+    items={[
+      { title: 'Brand Platforms', description: 'Narrative, messaging, identity, and rollouts engineered for momentum.' },
+      { title: 'Digital Experiences', description: 'Conversion-led websites and product UX that translate strategy into measurable action.' },
+      { title: 'Launch Systems', description: 'Campaign orchestration, asset production, and enablement to rally teams and audiences.' },
+    ]}
+  />
+  <ClientsShowcase
+    clients={clients.map((client) => ({
+      name: client.data.name,
+      logo: client.data.logo,
+      logoAlt: client.data.logoAlt,
+      website: client.data.website,
+    }))}
+    subheading="We embed alongside founders and marketing leaders when the stakes are high and timelines are sharp."
+  />
+  <TestimonialsShowcase
+    testimonials={testimonials.map((testimonial) => ({
+      quote: testimonial.data.quote,
+      clientName: testimonial.data.clientName,
+      clientRole: testimonial.data.clientRole,
+      company: testimonial.data.company,
+    }))}
+  />
+  <ConsultationCTA
+    heading="Ready to prime your next launch?"
+    subheading="Let’s map the engagement and ship the work that unlocks the next milestone."
+  />
+</DefaultPageLayout>

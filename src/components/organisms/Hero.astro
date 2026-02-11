@@ -1,0 +1,57 @@
+---
+/**
+ * @fileoverview Hero organism for page intros.
+ */
+import Heading from '@/components/atoms/Heading.astro';
+import CTAStack from '@/components/molecules/CTAStack.astro';
+
+interface HeroContent {
+  eyebrow?: string;
+  heading: string;
+  subheading?: string;
+  primaryCtaLabel?: string;
+  primaryCtaUrl?: string;
+  secondaryCtaLabel?: string;
+  secondaryCtaUrl?: string;
+}
+
+interface Props {
+  content: HeroContent;
+}
+
+const { content } = Astro.props;
+---
+<section class="c-hero section section--tight">
+  <div class="c-hero__inner container">
+    <Heading as="h1" size="xl" eyebrow={content.eyebrow}>
+      {content.heading}
+    </Heading>
+    {content.subheading && <p class="c-hero__subheading">{content.subheading}</p>}
+    {(content.primaryCtaLabel || content.secondaryCtaLabel) && (
+      <CTAStack
+        primaryLabel={content.primaryCtaLabel ?? 'Book consultation'}
+        primaryHref={content.primaryCtaUrl ?? '/contact'}
+        secondaryLabel={content.secondaryCtaLabel}
+        secondaryHref={content.secondaryCtaUrl}
+      />
+    )}
+  </div>
+</section>
+
+<style>
+  .c-hero {
+    position: relative;
+  }
+
+  .c-hero__inner {
+    display: grid;
+    gap: var(--space-6);
+    justify-items: start;
+  }
+
+  .c-hero__subheading {
+    max-width: 58ch;
+    font-size: clamp(1.15rem, 2.8vw, 1.5rem);
+    color: var(--color-text-secondary);
+  }
+</style>

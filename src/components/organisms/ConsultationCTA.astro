@@ -1,0 +1,50 @@
+---
+/**
+ * @fileoverview Consultation CTA banner organism.
+ */
+import Button from '@/components/atoms/Button.astro';
+
+interface Props {
+  heading: string;
+  subheading?: string;
+}
+
+const { heading, subheading } = Astro.props;
+---
+<section class="c-consultation section section--tight">
+  <div class="container c-consultation__inner">
+    <div class="c-consultation__copy">
+      <h2>{heading}</h2>
+      {subheading && <p>{subheading}</p>}
+    </div>
+    <Button href="/contact" label="Book consultation" variant="primary" size="lg" />
+  </div>
+</section>
+
+<style>
+  .c-consultation {
+    padding-block: clamp(3rem, 8vw, 5rem);
+  }
+
+  .c-consultation__inner {
+    display: grid;
+    gap: var(--space-6);
+    background: radial-gradient(circle at top left, color-mix(in srgb, var(--color-accent) 45%, transparent) 0%, transparent 65%),
+      color-mix(in srgb, var(--color-bg-surface) 85%, transparent);
+    border-radius: var(--card-radius);
+    padding: clamp(2rem, 6vw, 4rem);
+    border: 1px solid color-mix(in srgb, var(--color-border-subtle) 60%, transparent);
+    box-shadow: var(--shadow-lg);
+  }
+
+  @media (min-width: 900px) {
+    .c-consultation__inner {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+    }
+  }
+
+  .c-consultation__copy h2 {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+  }
+</style>

@@ -1,0 +1,45 @@
+---
+/**
+ * @fileoverview Styled text link with underline animation.
+ */
+interface Props {
+  href: string;
+  target?: '_blank' | '_self' | '_parent' | '_top';
+  rel?: string;
+  ariaLabel?: string;
+}
+
+const { href, target, rel, ariaLabel } = Astro.props;
+---
+<a class="c-text-link" href={href} target={target} rel={rel} aria-label={ariaLabel}>
+  <slot />
+</a>
+
+<style>
+  .c-text-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+  }
+
+  .c-text-link::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -0.2rem;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition-fast);
+  }
+
+  .c-text-link:hover::after,
+  .c-text-link:focus-visible::after {
+    transform: scaleX(1);
+  }
+</style>

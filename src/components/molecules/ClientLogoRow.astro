@@ -1,0 +1,56 @@
+---
+/**
+ * @fileoverview Client logo row molecule.
+ */
+interface ClientLogo {
+  name: string;
+  logo: string;
+  logoAlt: string;
+  website?: string;
+}
+
+interface Props {
+  items: ClientLogo[];
+}
+
+const { items } = Astro.props;
+---
+<ul class="c-client-row">
+  {items.map((item) => (
+    <li>
+      {item.website ? (
+        <a href={item.website} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${item.name}`}>
+          <img src={item.logo} alt={item.logoAlt} loading="lazy" decoding="async" />
+        </a>
+      ) : (
+        <img src={item.logo} alt={item.logoAlt} loading="lazy" decoding="async" />
+      )}
+    </li>
+  ))}
+</ul>
+
+<style>
+  .c-client-row {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-6);
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  .c-client-row img {
+    width: 100%;
+    height: auto;
+    filter: grayscale(1) contrast(1.1);
+    opacity: 0.9;
+    transition: opacity var(--transition-fast), filter var(--transition-fast);
+  }
+
+  .c-client-row a:hover img,
+  .c-client-row a:focus-visible img {
+    filter: grayscale(0);
+    opacity: 1;
+  }
+</style>
