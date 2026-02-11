@@ -10,6 +10,7 @@
     "dev:verbose": "astro dev --verbose",
     "start": "astro dev",
     "build": "astro build",
+    "postbuild": "node ./scripts/generate-pages-worker.mjs",
     "preview": "astro preview",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
